@@ -1,45 +1,64 @@
 let $buttons = $('#buttonWrapper > button')
 let $slides = $('#slides')
 let $images = $slides.children('img')
-let $firstCopy = $images.eq(0).clone(true)
-console.log($firstCopy)
-let $lastCopy = $images.eq($images.length -1).clone(true)
-
-$slides.append($firstCopy)
-$slides.prepend($lastCopy)
-$slides.css({'transform':'translateX(-400px)'})
-
-console.log($images)
 var current = 0
-$buttons.eq(0).on('click',function(){
-    if(current === 2){
-        $slides.css({'transform':'translateX(-1600px)'}).
-        one('transitionend',function(){
-            $slides.hide().offset()
-            $slides.css({transform:'translateX(-400px)'}).show()
-        })
-    }else{
-        $slides.css({'transform':'translateX(-400px)'})
-    }
+
+
+makeFakeSlides()
+$slides.css({'transform':'translateX(-400px)'})
+bindEvents()
+$(next).on('click',function(){
+    goToslide(current+1)
+})
+$(prev).on('click',function(){
+    goToslide(current-1)
+})
+var timer = setInterval(function(){goToslide(current+1)},2000)
+$('.window').on('mouseenter',function(e){
+    window.clearInterval(timer);
+    $(e.currentTarget).css({'cursor':'pointer'})
+})
+$('.window').on('mouseleave',function(e){
+    var timer = setInterval(function(){goToslide(current+1)},2000)
    
-   current = 0
-}) 
-$($buttons[1]).on('click',function(){
-    $slides.css({'transform':'translateX(-800px)'})
-    
-    current = 1
-}) 
-$buttons.eq(2).on('click',function(){
-    if(current === 0){
-        console.log('first to last')
-        $slides.css({'transform':'translateX(-0px)'})
-        one('transitionend',function(){
-            $slides.hide().offset()
-            $slides.css({transform:'translateX(-1200px)'}).show()
-        })
+})
+//function below
+function makeFakeSlides(){
+    let $firstCopy = $images.eq(0).clone(true)
+    let $lastCopy = $images.eq($images.length -1).clone(true)
+    $slides.append($firstCopy)
+    $slides.prepend($lastCopy)
+}
+
+
+function bindEvents(){
+    $('#buttonWrapper').on('click','button',function(e){
+        let $button = $(e.currentTarget)
+        let index = $button.index()
+        goToslide(index)
+
+    })
+
+}
+function goToslide(index){
+    if(current === $buttons.length-1 && index === 0){
+        $slides.css({'transform':'translateX('+((-400)*($buttons.length +1)) +'px)'}).
+                one('transitionend',function(){
+                    $slides.hide().offset()
+                    $slides.css({transform:'translateX(-400px)'}).show()
+                })
+    }else if(current === 0 && index === $buttons.length -1){
+        $slides.css({'transform':'translateX('+ (0) +'px)'}).
+                one('transitionend',function(){
+                    $slides.hide().offset()
+                    $slides.css({transform:'translateX('+((-400)*(index+1)) +'px)'}).show()
+                })
+
     }else{
-        $slides.css({'transform':'translateX(-1200px)'})
+        $slides.css({'transform':'translateX('+(-400*(index+1)) +'px)'})
     }
-    
-    current = 2
-}) 
+    current = index
+    console.log(current)
+ 
+}
+
