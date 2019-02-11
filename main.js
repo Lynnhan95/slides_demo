@@ -41,6 +41,11 @@ function bindEvents(){
 
 }
 function goToslide(index){
+    if(index>$buttons.length -1){
+        index=0
+    }else if(index<0){
+        index = $buttons.length -1
+    }
     if(current === $buttons.length-1 && index === 0){
         $slides.css({'transform':'translateX('+((-400)*($buttons.length +1)) +'px)'}).
                 one('transitionend',function(){
