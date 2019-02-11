@@ -13,13 +13,13 @@ $(next).on('click',function(){
 $(prev).on('click',function(){
     goToslide(current-1)
 })
-var timer = setInterval(function(){goToslide(current+1)},2000)
-$('.window').on('mouseenter',function(e){
+var timer = setInterval(function(){goToslide(current+1)},4000)
+$('.wrapper').on('mouseenter',function(e){
     window.clearInterval(timer);
     $(e.currentTarget).css({'cursor':'pointer'})
 })
-$('.window').on('mouseleave',function(e){
-    var timer = setInterval(function(){goToslide(current+1)},2000)
+$('.wrapper').on('mouseleave',function(e){
+    var timer = setInterval(function(){goToslide(current+1)},4000)
    
 })
 //function below
